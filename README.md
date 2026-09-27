@@ -4,6 +4,11 @@
 
 Created by [Khaled Alrefai](https://github.com/Kaldx5). Designed around a Dell G16 environment, with a C# desktop host and an offline HTML/CSS/JavaScript interface.
 
+## A look at the interface 🖥️
+
+<img src="assets/dashboard.png" width="230" alt="GSwitcher dashboard UI"> <img src="assets/processor.png" width="230" alt="GSwitcher processor editor UI"> <img src="assets/thermal.png" width="230" alt="GSwitcher thermal diagnostics UI">
+
+These captures show the project's actual HTML interface rendered with example state for presentation. The displayed temperatures, processes, hardware labels, and settings are demonstration values, not a hardware test result. The working desktop host and control paths are in [the source](source/GSwitcher.Desktop).
 ## How it started 💻
 
 My Dell G16 was running hotter and more aggressively than I expected during normal use. I started looking into what Windows was doing underneath, then manually tested power plans, processor limits, Boost behavior, and Dell thermal profiles.
