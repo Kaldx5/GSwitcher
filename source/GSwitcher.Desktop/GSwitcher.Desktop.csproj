@@ -1,0 +1,147 @@
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{CB9DEB58-0C7E-4F76-AE4A-C5BE9B3178DF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>GSwitcher</RootNamespace>
+    <AssemblyName>GSwitcher</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <WarningLevel>4</WarningLevel>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <BaseIntermediateOutputPath>..\..\artifacts\obj\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\artifacts\bin\Debug\</OutputPath>
+    <IntermediateOutputPath>..\..\artifacts\obj\Debug\</IntermediateOutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\artifacts\bin\Release\</OutputPath>
+    <IntermediateOutputPath>..\..\artifacts\obj\Release\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>..\..\vendor\packages\Microsoft.Web.WebView2.1.0.2420.47\lib\net45\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.Wpf">
+      <HintPath>..\..\vendor\packages\Microsoft.Web.WebView2.1.0.2420.47\lib\net45\Microsoft.Web.WebView2.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NvAPIWrapper">
+      <HintPath>..\..\vendor\packages\NvAPIWrapper.Net.0.8.1.101\lib\net45\NvAPIWrapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OsdWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TelemetryHudWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OsdWindow.xaml.cs">
+      <DependentUpon>OsdWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TelemetryHudWindow.xaml.cs">
+      <DependentUpon>TelemetryHudWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Hardware\AwccMuxController.cs" />
+    <Compile Include="Hardware\DisplayStateService.cs" />
+    <Compile Include="Hardware\GpuActivityDetector.cs" />
+    <Compile Include="Hardware\GpuRouteDetector.cs" />
+    <Compile Include="Hardware\GpuManager.cs" />
+    <Compile Include="Hardware\NvidiaController.cs" />
+    <Compile Include="Hardware\NvidiaPanelController.cs" />
+    <Compile Include="Hardware\PowerManager.cs" />
+    <Compile Include="Hardware\ProcessorPowerSettingsService.cs" />
+    <Compile Include="Hardware\ThermalDiagnosticsService.cs" />
+    <Compile Include="Hardware\SmartCoolingService.cs" />
+    <Compile Include="Hardware\CpuStressTestService.cs" />
+    <Compile Include="Models\AppState.cs" />
+    <Compile Include="Models\PowerPlanProfile.cs" />
+    <Compile Include="Models\OperationResult.cs" />
+    <Compile Include="Runtime\AppSettings.cs" />
+    <Compile Include="Runtime\AppPaths.cs" />
+    <Compile Include="Runtime\AppLogger.cs" />
+    <Compile Include="Runtime\AppStateStore.cs" />
+    <Compile Include="Runtime\AudioPrivacyShield.cs" />
+    <Compile Include="Runtime\AutomationEngine.cs" />
+    <Compile Include="Runtime\EphemeralElevationService.cs" />
+    <Compile Include="Runtime\NetworkFocusService.cs" />
+    <Compile Include="Runtime\RuntimeCleanupService.cs" />
+    <Compile Include="Runtime\SettingsManager.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ui\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ui\style.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="App.config" />
+    <None Include="app.manifest" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,73 @@
+<Window x:Class="GSwitcher.OsdWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GSwitcher Quick Switch"
+        Width="460"
+        Height="150"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        KeyDown="Window_KeyDown">
+    <Border CornerRadius="34"
+            Background="#E60A0A0C"
+            BorderBrush="#33FFFFFF"
+            BorderThickness="1"
+            Padding="18">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="34"
+                              ShadowDepth="0"
+                              Color="#000000"
+                              Opacity="0.55" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Q U I C K  P O W E R"
+                       Foreground="#9EA8C8"
+                       FontFamily="Segoe UI"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,13" />
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="UltraCard" Grid.Column="0" CornerRadius="24" BorderThickness="1" Padding="14,10">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="UltraTitle" Text="ULTRA" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="Unlocked" Foreground="#77809B" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="DailyCard" Grid.Column="2" CornerRadius="24" BorderThickness="1" Padding="14,10">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="DailyTitle" Text="DAILY" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="Cool" Foreground="#77809B" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+
+                <Border x:Name="BatteryCard" Grid.Column="4" CornerRadius="24" BorderThickness="1" Padding="14,10">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="BatteryTitle" Text="ECO" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="Guard" Foreground="#77809B" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

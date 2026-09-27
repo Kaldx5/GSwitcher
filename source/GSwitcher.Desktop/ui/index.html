@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSwitcher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="app" class="elite-shell" data-theme="dark" data-power="daily" data-route="unknown" data-busy="false" data-pinned="false" data-drawer="closed" data-thermal="closed" data-emergency="false" data-signature="right">
+    <header class="top-rail" data-drag-region="true">
+      <button id="themeBtn" class="orb-button theme-button" type="button" aria-label="Toggle theme">
+        <span class="sun-mark" aria-hidden="true"></span>
+      </button>
+
+      <div id="statusPill" class="status-pill" aria-live="polite">
+        <span id="statusDot" class="status-dot" aria-hidden="true"></span>
+        <span id="statusText">System Sync</span>
+      </div>
+
+      <button id="hideBtn" class="orb-button hide-button" type="button" aria-label="Hide dashboard">
+        <span class="dash-mark" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <section class="reactor-stage" aria-label="Active power mode">
+      <div class="reactor-orbit" aria-hidden="true">
+        <span class="orbit-line orbit-a"></span>
+        <span class="orbit-line orbit-b"></span>
+        <span class="orbit-line orbit-c"></span>
+        <span class="orbital-glow"></span>
+        <span class="reactor-center"></span>
+      </div>
+      <h1 id="modeTitle">Daily</h1>
+    </section>
+
+    <section class="power-switch" aria-label="Power plan">
+      <span id="powerLens" class="power-lens" aria-hidden="true"></span>
+      <button id="powerUltra" class="power-choice" type="button" data-mode="ultra">Ultra</button>
+      <button id="powerDaily" class="power-choice active" type="button" data-mode="daily">Daily</button>
+      <button id="powerBattery" class="power-choice" type="button" data-mode="battery">Eco</button>
+    </section>
+
+    <section class="gpu-readout" aria-label="Detected graphics owner">
+      <div id="nvidiaNode" class="gpu-token nvidia-token">
+        <span class="gpu-dot" aria-hidden="true"></span>
+        <span>RTX 4070</span>
+      </div>
+      <div id="intelNode" class="gpu-token intel-token">
+        <span class="gpu-dot" aria-hidden="true"></span>
+        <span>Intel UHD</span>
+      </div>
+    </section>
+
+    <footer class="signature-zone">
+      <button id="pinBtn" class="footer-orb pin-button" type="button" aria-label="Pin dashboard">
+        <span class="pin-mark" aria-hidden="true"></span>
+      </button>
+
+      <div class="signature-slot" aria-hidden="true"></div>
+
+      <button id="settingsBtn" class="footer-orb settings-button" type="button" aria-label="Feature settings">
+        <span class="gear-mark" aria-hidden="true"></span>
+      </button>
+
+      <button id="thermalBtn" class="footer-orb thermal-button" type="button" aria-label="Thermal diagnostics">
+        <span class="therm-mark" aria-hidden="true"></span>
+      </button>
+    </footer>
+
+    <div class="signature-wrap" aria-label="Eng. Khaled Al-Refai">
+      <span class="signature-laser laser-top" aria-hidden="true"></span>
+      <span class="signature-text">Eng. Khaled Al-Refai</span>
+      <span class="signature-laser laser-bottom" aria-hidden="true"></span>
+    </div>
+
+    <aside id="settingsDrawer" class="settings-drawer" aria-label="Super engine settings">
+      <div class="drawer-head">
+        <span>Super Engines</span>
+        <button id="closeSettingsBtn" class="drawer-close" type="button" aria-label="Close settings">
+          <span class="dash-mark" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="toggle-list">
+        <button id="signaturePlacementBtn" class="toggle-row" type="button" data-tip="Choose the right edge, left edge, or a full-width position above the footer.">
+          <span>Signature position</span><span id="signaturePlacementValue" class="signature-placement-value">Right edge</span>
+        </button>
+        <button id="processorEditorBtn" class="toggle-row" type="button">
+          <span>Processor power editor</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="smartCoolingAutomaticEnabled" data-tip="Allow the thermal autopilot to start Smart Cooling automatically. Manual cooling profiles still work when you choose them.">
+          <span>Automatic optimization</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="runOnStartup" data-tip="Launch GSwitcher silently when Windows starts.">
+          <span>Start with Windows</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="quickSwitchOsd" data-tip="Ctrl+Shift+Space opens the quick power-mode overlay.">
+          <span>Quick OSD</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="afkDownclock" data-tip="Only Ultra drops to Daily after 10 minutes idle, then restores on input.">
+          <span>AFK downclock</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="standbyHygiene" data-tip="Before suspend, Eco is applied to reduce wake-in-bag heat risk.">
+          <span>Standby hygiene</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="batteryBleedOut" data-tip="When unplugged at 15 percent, Eco is forced and animations stop.">
+          <span>Battery guard</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="bitsServiceHook" data-tip="Pauses BITS background transfers while Ultra is active, then resumes on exit.">
+          <span>Network focus</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="lidClosedFailsafe" data-tip="Blocks Ultra after Windows reports the laptop lid is closed.">
+          <span>Lid failsafe</span><i aria-hidden="true"></i>
+        </button>
+                    <button class="toggle-row" type="button" data-setting="telemetryHud" data-tip="Alt+Shift+T opens the tiny click-through power, CPU, and RAM HUD.">
+          <span>Phantom HUD</span><i aria-hidden="true"></i>
+        </button>
+        <button class="toggle-row" type="button" data-setting="audioPrivacyShield" data-tip="Mutes internal speakers when Windows falls back from headphones.">
+          <span>Audio shield</span><i aria-hidden="true"></i>
+        </button>
+      </div>
+    </aside>
+
+    <aside id="processorDrawer" class="settings-drawer processor-drawer" aria-label="Processor power management editor">
+      <div class="drawer-head">
+        <span>Processor Power</span>
+        <button id="closeProcessorBtn" class="drawer-close" type="button" aria-label="Close processor editor"><span class="dash-mark" aria-hidden="true"></span></button>
+      </div>
+      <div style="padding:10px; overflow:auto; max-height:490px;">
+        <div style="font-size:.72rem; color:#f6c453; margin-bottom:8px;">Safe editor: only settings discovered in the active Windows processor subgroup are writable. Changes affect the current scheme; snapshot before editing.</div>
+        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;">
+          <button class="smart-btn" data-processor-preset="balanced" type="button">G16 Balanced</button>
+          <button class="smart-btn" data-processor-preset="performance" type="button">G16 Performance</button>
+          <button class="smart-btn" data-processor-preset="battery" type="button">G16 Battery</button>
+        </div>
+        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-bottom:8px;">
+          <button class="smart-btn" data-processor-action="snapshot" type="button">Snapshot</button>
+          <button class="smart-btn" data-processor-action="export" type="button">Export copy</button>
+          <button class="smart-btn" data-processor-action="restore" type="button">Restore latest</button>
+          <button class="smart-btn" data-processor-action="refresh" type="button">Refresh</button>
+        </div>
+        <div id="processorScheme" style="font-size:.7rem; opacity:.75; margin-bottom:6px;"></div>
+        <div id="processorSettingsList"><div class="thermal-empty">Open to query Windows...</div></div>
+      </div>
+    </aside>
+
+    <aside id="thermalDrawer" class="thermal-drawer" aria-label="Thermal management and diagnostics">
+      <div class="drawer-head">
+        <span>Thermal Control</span>
+        <button id="closeThermalBtn" class="drawer-close" type="button" aria-label="Close thermal control">
+          <span class="dash-mark" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="thermal-content">
+        <div class="thermal-section-label">Smart Cooling Mode</div>
+        <div class="smart-cooling-selector">
+          <button class="smart-btn" type="button" data-smart="simple">Eco (&lt;50°C)</button>
+          <button class="smart-btn" type="button" data-smart="medium">Medium (&lt;60°C)</button>
+          <button class="smart-btn" type="button" data-smart="high">Heavy (&lt;75°C)</button>
+          <button id="smartStopBtn" class="smart-btn" type="button">Stop automatic optimization</button>
+        </div>
+
+        <div id="smartStatusBox" class="smart-status-box">
+          <div class="smart-status-header">
+            <span id="smartPulse" class="smart-pulse"></span>
+            <span id="smartStatusTitle" class="smart-status-title">Optimizer: Idle</span>
+            <button id="smartResetBtn" class="smart-reset-link" type="button">Re-optimize</button>
+          </div>
+          <div id="smartStatusText" class="smart-status-text">Select a cooling profile to activate dynamic temperature control.</div>
+        </div>
+
+        <div class="thermal-section-label">CPU Stress &amp; Auto-Tune</div>
+        <div class="stress-test-selector" style="grid-template-columns: 1fr;">
+          <button class="stress-btn" type="button" data-stress="tested-ultra">Calibrate Ultra Plan</button>
+        </div>
+
+        <div id="stressStatusBox" class="stress-status-box">
+          <div class="stress-status-header">
+            <span id="stressPulse" class="stress-pulse"></span>
+            <span id="stressStatusTitle" class="stress-status-title">Auto-Tuner: Idle</span>
+            <button id="stressStopBtn" class="stress-stop-link" type="button" style="display: none;">Cancel</button>
+          </div>
+          <div id="stressProgressContainer" class="stress-progress-container" style="display: none; margin-top: 6px; height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 3px; overflow: hidden;">
+            <div id="stressProgressBar" class="stress-progress-bar" style="width: 0%; height: 100%; background: #00d2ff; transition: width 0.3s ease;"></div>
+          </div>
+          <div id="stressStatusText" class="stress-status-text" style="white-space: pre-wrap; font-family: monospace; font-size: 0.65rem; line-height: 1.3; margin-top: 6px; color: #a0a0a0;">Run a 2-min benchmark to auto-calibrate the Ultra plan for optimal thermal performance on your system.</div>
+        </div>
+
+        <div class="thermal-section-label">Dell Hardware Fan Profiles</div>
+        <div class="dell-profile-selector">
+          <button class="dell-btn" type="button" data-dell="163">Quiet</button>
+          <button class="dell-btn" type="button" data-dell="162">Cool</button>
+          <button class="dell-btn" type="button" data-dell="160">Balanced</button>
+          <button class="dell-btn" type="button" data-dell="164">Perf</button>
+          <button class="dell-btn" type="button" data-dell="171">G-Mode</button>
+        </div>
+
+        <div class="thermal-section-label">Manual OS Overrides</div>
+        <div class="boost-selector">
+          <button class="boost-btn" type="button" data-boost="0">Boost Off</button>
+          <button class="boost-btn" type="button" data-boost="1">Boost On</button>
+          <button class="boost-btn" type="button" data-boost="3">Efficient</button>
+          <button class="boost-btn" type="button" data-boost="2">Aggressive</button>
+        </div>
+
+        <button id="maxStateToggleBtn" class="maxstate-toggle" type="button">
+          <span class="ms-label">Limit CPU State (99%)</span>
+          <span id="maxStateValue" class="ms-value">100%</span>
+        </button>
+
+        <div class="thermal-section-label">System Diagnostics</div>
+        <div class="thermal-stats">
+          <div class="thermal-stat-row">
+            <span class="stat-label">CPU Temp</span>
+            <span id="cpuTempBadge" class="temp-badge">-</span>
+          </div>
+          <div class="thermal-stat-row" id="fanSpeedsRow" style="display: none;">
+            <span class="stat-label">Fans Speed</span>
+            <span id="fanSpeedsVal" class="stat-value" style="font-family: monospace; font-size: 0.60rem;">-</span>
+          </div>
+          <div class="thermal-stat-row">
+            <span class="stat-label">Processor</span>
+            <span id="cpuName" class="stat-value">-</span>
+          </div>
+          <div class="thermal-stat-row">
+            <span class="stat-label">Core Frequency</span>
+            <span id="cpuClock" class="stat-value">-</span>
+          </div>
+          <div class="thermal-stat-row">
+            <span class="stat-label">Fan Profile</span>
+            <span id="dellProfileVal" class="stat-value">-</span>
+          </div>
+          <div class="thermal-stat-row">
+            <span class="stat-label">Power Scheme</span>
+            <span id="activeScheme" class="stat-value">-</span>
+          </div>
+          <div class="thermal-stat-row">
+            <span class="stat-label">Boost Value</span>
+            <span id="boostValLabel" class="stat-value">-</span>
+          </div>
+        </div>
+
+        <div class="thermal-section-label">Root Cause Diagnostics</div>
+        <div id="rcaBox" class="rca-box" style="padding: 10px; background: rgba(255, 255, 255, 0.03); border-radius: 6px; margin-bottom: 12px; font-size: 0.75rem; border: 1px solid rgba(255, 255, 255, 0.05);">
+          <div id="rcaStatus" style="font-weight: bold; margin-bottom: 6px; color: #a0a0a0;">Scanning services...</div>
+          <div id="rcaIssues" style="margin-bottom: 8px; line-height: 1.3; color: #d0d0d0;">No software anomalies detected.</div>
+          <div id="rcaActions" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+        </div>
+
+        <div class="thermal-section-label">Top CPU Processes</div>
+        <div id="processList" class="process-list">
+          <div class="thermal-empty">No diagnostics data loaded.</div>
+        </div>
+
+        <button id="refreshThermalBtn" class="thermal-refresh-btn" type="button">
+          Refresh Diagnostics
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    (function () {
+      var app = document.getElementById("app");
+      var state = {
+        theme: "dark",
+        powerMode: "daily",
+        gpuMode: "unknown",
+        gpuRouteMode: "unknown",
+        status: "Ready.",
+        isBusy: false,
+        isPinned: false,
+        settings: {}
+      };
+      var statusIsError = false;
+      var activeSmartProfile = null;
+
+      var nodes = {
+        theme: document.getElementById("themeBtn"),
+        hide: document.getElementById("hideBtn"),
+        pin: document.getElementById("pinBtn"),
+        settings: document.getElementById("settingsBtn"),
+        closeSettings: document.getElementById("closeSettingsBtn"),
+        lens: document.getElementById("powerLens"),
+        modeTitle: document.getElementById("modeTitle"),
+        statusText: document.getElementById("statusText"),
+        statusDot: document.getElementById("statusDot"),
+        nvidia: document.getElementById("nvidiaNode"),
+        intel: document.getElementById("intelNode"),
+        thermalBtn: document.getElementById("thermalBtn"),
+        thermalDrawer: document.getElementById("thermalDrawer"),
+        processorDrawer: document.getElementById("processorDrawer"),
+        processorList: document.getElementById("processorSettingsList"),
+        processorScheme: document.getElementById("processorScheme"),
+        closeThermal: document.getElementById("closeThermalBtn"),
+        refreshThermal: document.getElementById("refreshThermalBtn"),
+        maxStateToggle: document.getElementById("maxStateToggleBtn"),
+        maxStateValue: document.getElementById("maxStateValue"),
+        cpuName: document.getElementById("cpuName"),
+        fanSpeedsRow: document.getElementById("fanSpeedsRow"),
+        fanSpeedsVal: document.getElementById("fanSpeedsVal"),
+        cpuClock: document.getElementById("cpuClock"),
+        activeScheme: document.getElementById("activeScheme"),
+        boostValLabel: document.getElementById("boostValLabel"),
+        processList: document.getElementById("processList"),
+
+        smartStatusBox: document.getElementById("smartStatusBox"),
+        smartStatusTitle: document.getElementById("smartStatusTitle"),
+        smartStatusText: document.getElementById("smartStatusText"),
+        smartReset: document.getElementById("smartResetBtn"),
+         smartStop: document.getElementById("smartStopBtn"),
+        smartPulse: document.getElementById("smartPulse"),
+        cpuTempBadge: document.getElementById("cpuTempBadge"),
+        dellProfileVal: document.getElementById("dellProfileVal"),
+
+        stressStatusBox: document.getElementById("stressStatusBox"),
+        stressStatusTitle: document.getElementById("stressStatusTitle"),
+        stressStatusText: document.getElementById("stressStatusText"),
+        stressStop: document.getElementById("stressStopBtn"),
+        stressPulse: document.getElementById("stressPulse"),
+        stressProgressContainer: document.getElementById("stressProgressContainer"),
+        stressProgressBar: document.getElementById("stressProgressBar")
+      };
+
+      function post(message) {
+        if (window.chrome && window.chrome.webview) {
+          window.chrome.webview.postMessage(message);
+        }
+      }
+
+      function bool(value) {
+        return value === true || value === "true" || value === 1;
+      }
+
+      function normalizePower(mode) {
+        mode = (mode || "").toLowerCase();
+        if (mode === "eco" || mode === "tested-eco") return "battery";
+        if (mode === "tested-ultra") return "ultra";
+        if (mode === "tested-cool" || mode === "daily-cool") return "daily";
+        if (mode === "ultra" || mode === "daily" || mode === "battery") return mode;
+        return "other";
+      }
+
+      function normalizeRoute(mode) {
+        mode = (mode || "").toLowerCase();
+        if (mode === "dgpu" || mode === "nvidia" || mode === "rtx" || mode === "discrete") return "dgpu";
+        if (mode === "hybrid" || mode === "intel" || mode === "integrated") return "hybrid";
+        return "unknown";
+      }
+
+      function normalizeSettings(settings) {
+        settings = settings || {};
+        var signaturePlacement = settings.signaturePlacement || settings.SignaturePlacement || "right";
+        if (signaturePlacement !== "left" && signaturePlacement !== "bottom") signaturePlacement = "right";
+        return {
+          theme: settings.theme || settings.Theme || state.theme || "dark",
+          signaturePlacement: signaturePlacement,
+          runOnStartup: bool(settings.runOnStartup || settings.RunOnStartup),
+          quickSwitchOsd: bool(settings.quickSwitchOsd || settings.QuickSwitchOsd),
+          afkDownclock: bool(settings.afkDownclock || settings.AfkDownclock),
+          standbyHygiene: bool(settings.standbyHygiene || settings.StandbyHygiene),
+          batteryBleedOut: bool(settings.batteryBleedOut || settings.BatteryBleedOut),
+          bitsServiceHook: bool(settings.bitsServiceHook || settings.BitsServiceHook),
+          lidClosedFailsafe: bool(settings.lidClosedFailsafe || settings.LidClosedFailsafe),
+          telemetryHud: bool(settings.telemetryHud || settings.TelemetryHud),
+          audioPrivacyShield: bool(settings.audioPrivacyShield || settings.AudioPrivacyShield),
+          smartCoolingAutomaticEnabled: bool(settings.smartCoolingAutomaticEnabled || settings.SmartCoolingAutomaticEnabled)
+        };
+      }
+
+      function powerLabel(mode) {
+        if (mode === "ultra") return "Ultra";
+        if (mode === "battery") return "Eco";
+        if (mode === "other") return "Custom";
+        return "Daily";
+      }
+
+      function setMotionProfile(power) {
+        var profile = power === "ultra"
+          ? ["1.45s", "2s", "1.15s", "1.3s"]
+          : power === "battery"
+            ? ["12s", "15s", "10s", "5.8s"]
+            : ["6s", "8s", "4.5s", "3.2s"];
+
+        app.style.setProperty("--orbit-speed-a", profile[0]);
+        app.style.setProperty("--orbit-speed-b", profile[1]);
+        app.style.setProperty("--orbit-speed-c", profile[2]);
+        app.style.setProperty("--core-speed", profile[3]);
+      }
+
+      function statusLabel() {
+        if (statusIsError) return "Attention";
+        if (state.isBusy) return "System Sync";
+        return state.status || "Ready";
+      }
+
+      function renderPower(power) {
+        var index = power === "ultra" ? 0 : power === "battery" ? 2 : 1;
+        setMotionProfile(power);
+        nodes.lens.style.transform = "translateX(" + (index * 100) + "%)";
+        nodes.lens.style.opacity = power === "other" ? "0" : "1";
+        nodes.modeTitle.textContent = powerLabel(power);
+
+        Array.prototype.forEach.call(document.querySelectorAll("[data-mode]"), function (button) {
+          button.classList.toggle("active", button.getAttribute("data-mode") === power);
+          button.disabled = !!state.isBusy;
+        });
+      }
+
+      function renderGpu() {
+        var route = normalizeRoute(state.gpuRouteMode || state.gpuMode);
+        nodes.nvidia.classList.toggle("active", route === "dgpu");
+        nodes.intel.classList.toggle("active", route === "hybrid");
+      }
+
+      function renderSettings() {
+        var settings = normalizeSettings(state.settings);
+        state.settings = settings;
+        app.setAttribute("data-signature", settings.signaturePlacement);
+        document.getElementById("signaturePlacementValue").textContent =
+          settings.signaturePlacement === "left" ? "Left edge" :
+          settings.signaturePlacement === "bottom" ? "Above footer" : "Right edge";
+        Array.prototype.forEach.call(document.querySelectorAll("[data-setting]"), function (row) {
+          var key = row.getAttribute("data-setting");
+          row.classList.toggle("on", !!settings[key]);
+        });
+      }
+
+      function renderProcessor(data) {
+        data = data || {};
+        nodes.processorScheme.textContent = "Active scheme: " + (data.schemeName || "Unknown") + " (" + (data.schemeGuid || "") + ")";
+        nodes.processorList.innerHTML = "";
+        var settings = (data.settings || []).map(function (raw) {
+          raw = raw || {};
+          return {
+            guid: raw.guid || raw.Guid || "",
+            name: raw.name || raw.Name || raw.guid || raw.Guid || "Processor setting",
+            acValue: raw.acValue !== undefined ? raw.acValue : raw.AcValue,
+            dcValue: raw.dcValue !== undefined ? raw.dcValue : raw.DcValue,
+            possibleValues: raw.possibleValues || raw.PossibleValues || [],
+            unit: raw.unit || raw.Unit || "",
+            minimumValue: raw.minimumValue !== undefined ? raw.minimumValue : raw.MinimumValue,
+            maximumValue: raw.maximumValue !== undefined ? raw.maximumValue : raw.MaximumValue,
+            increment: raw.increment !== undefined ? raw.increment : raw.Increment,
+            hasRange: raw.hasRange !== undefined ? raw.hasRange : !!raw.HasRange,
+            writable: raw.writable !== undefined ? raw.writable : raw.Writable
+          };
+        });
+        if (data.error) {
+          nodes.processorList.innerHTML = '<div class="thermal-empty" style="color:#ff8c8c;"></div>';
+          nodes.processorList.firstChild.textContent = data.error;
+          return;
+        }
+        if (settings.length) {
+          var group = document.createElement("div");
+          group.textContent = "Processor power management (" + settings.length + " settings)";
+          group.style.cssText = "font-size:.68rem;font-weight:bold;color:#8fd3ff;margin:4px 0 6px;";
+          nodes.processorList.appendChild(group);
+        }
+        settings.forEach(function (item) {
+          var row = document.createElement("div");
+          row.style.cssText = "border:1px solid rgba(255,255,255,.09);border-radius:5px;padding:7px;margin-bottom:6px;";
+          var title = document.createElement("div");
+          title.textContent = item.name || item.guid;
+          title.style.cssText = "font-size:.72rem;font-weight:bold;margin-bottom:4px;";
+          row.appendChild(title);
+          var possible = document.createElement("div");
+          if (item.hasRange) {
+            possible.textContent = "Possible: " + item.minimumValue + "–" + item.maximumValue +
+              (item.increment > 1 ? " (step " + item.increment + ")" : "") + (item.unit ? " " + item.unit : "");
+          } else {
+            possible.textContent = "Possible: " + ((item.possibleValues || []).join(", ") || "Windows-defined");
+          }
+          possible.style.cssText = "font-size:.60rem;opacity:.72;margin-bottom:5px;";
+          row.appendChild(possible);
+          var values = document.createElement("div");
+          values.style.cssText = "display:flex;gap:4px;align-items:center;";
+          ["ac", "dc"].forEach(function (plane) {
+            var label = document.createElement("span");
+            label.textContent = plane.toUpperCase();
+            label.style.fontSize = ".62rem";
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = String(plane === "ac" ? item.acValue : item.dcValue);
+            input.title = "Decimal DWORD; advertised values: " + ((item.possibleValues || []).join(", ") || "any DWORD");
+            if (item.hasRange) {
+              input.title = "Decimal value from " + item.minimumValue + " to " + item.maximumValue +
+                (item.increment > 1 ? ", step " + item.increment : "") + (item.unit ? " " + item.unit : "");
+            }
+            input.style.cssText = "width:58px;background:#0b1220;color:#fff;border:1px solid #334155;border-radius:3px;padding:3px;font-size:.68rem;";
+            var save = document.createElement("button");
+            save.textContent = "Set";
+            save.className = "smart-btn";
+            save.type = "button";
+            save.onclick = function () { post("processor:set:" + item.guid + ":" + plane + ":" + input.value); };
+            values.appendChild(label); values.appendChild(input); values.appendChild(save);
+          });
+          row.appendChild(values);
+          nodes.processorList.appendChild(row);
+        });
+        if (!settings.length) nodes.processorList.innerHTML = '<div class="thermal-empty">No processor settings were exposed by this Windows build.</div>';
+      }
+
+      function render() {
+        var power = normalizePower(state.powerMode);
+        var theme = state.theme === "light" ? "light" : "dark";
+        var route = normalizeRoute(state.gpuRouteMode || state.gpuMode);
+
+        app.setAttribute("data-theme", theme);
+        app.setAttribute("data-power", power);
+        app.setAttribute("data-route", route);
+        app.setAttribute("data-busy", state.isBusy ? "true" : "false");
+        app.setAttribute("data-pinned", state.isPinned ? "true" : "false");
+        app.setAttribute("data-status", statusIsError ? "error" : (state.isBusy ? "busy" : "ok"));
+
+        nodes.statusText.textContent = statusLabel();
+        nodes.statusText.title = state.status || "";
+        nodes.theme.classList.toggle("active", theme === "light");
+        nodes.pin.classList.toggle("active", !!state.isPinned);
+
+        renderPower(power);
+        renderGpu();
+        renderSettings();
+      }
+
+      function merge(next) {
+        if (!next) return;
+        Object.keys(next).forEach(function (key) {
+          state[key] = next[key];
+        });
+
+        state.settings = normalizeSettings(state.settings);
+        if (state.settings.theme) {
+          state.theme = state.settings.theme;
+        }
+
+        statusIsError = false;
+        render();
+      }
+
+      function updateThermalUi(snapshot, processes) {
+        if (!snapshot) return;
+
+        var currentBoost = snapshot.boostMode;
+        Array.prototype.forEach.call(document.querySelectorAll("[data-boost]"), function (button) {
+          var val = parseInt(button.getAttribute("data-boost"), 10);
+          button.classList.toggle("active", val === currentBoost);
+        });
+
+        var maxState = snapshot.maxProcessorState;
+        nodes.maxStateToggle.classList.toggle("active", maxState < 100);
+        nodes.maxStateValue.textContent = maxState + "%";
+
+        nodes.cpuName.textContent = snapshot.cpuName || "Unknown";
+        if (snapshot.currentClock > 0) {
+          nodes.cpuClock.textContent = (snapshot.currentClock / 1000).toFixed(2) + " GHz" + 
+            (snapshot.baseClock > 0 ? " (Base: " + (snapshot.baseClock / 1000).toFixed(2) + " GHz)" : "");
+        } else {
+          nodes.cpuClock.textContent = "-";
+        }
+        nodes.activeScheme.textContent = snapshot.schemeName || "Unknown";
+        nodes.boostValLabel.textContent = snapshot.boostLabel || ("Mode " + currentBoost);
+
+        // Update live temp badge
+        var temp = snapshot.cpuTemp || 0;
+        if (temp > 0) {
+          nodes.cpuTempBadge.textContent = temp + "°C";
+          nodes.cpuTempBadge.className = "temp-badge " + (temp < 55 ? "temp-cool" : (temp < 75 ? "temp-warm" : "temp-hot"));
+        } else {
+          nodes.cpuTempBadge.textContent = "-";
+          nodes.cpuTempBadge.className = "temp-badge";
+        }
+
+        // Update fan speeds
+        if (snapshot.fanSpeeds && snapshot.fanSpeeds.length > 0) {
+          var speedsText = snapshot.fanSpeeds.map(function (rpm, idx) {
+            return "Fan " + (idx + 1) + ": " + rpm + " RPM";
+          }).join(" | ");
+          nodes.fanSpeedsVal.textContent = speedsText;
+          nodes.fanSpeedsRow.style.display = "flex";
+        } else {
+          nodes.fanSpeedsRow.style.display = "none";
+        }
+
+        // Update Dell active profile
+        var dellProfile = snapshot.dellThermalProfile || 0;
+        nodes.dellProfileVal.textContent = snapshot.dellProfileLabel || "Unknown";
+        Array.prototype.forEach.call(document.querySelectorAll("[data-dell]"), function (button) {
+          var val = parseInt(button.getAttribute("data-dell"), 10);
+          button.classList.toggle("active", val === dellProfile);
+        });
+
+        // Update Smart Cooling status
+        var sc = snapshot.smartCooling;
+        if (sc) {
+          activeSmartProfile = sc.activeProfile;
+          
+          Array.prototype.forEach.call(document.querySelectorAll("[data-smart]"), function (button) {
+            var val = button.getAttribute("data-smart");
+            button.classList.toggle("active", val === sc.activeProfile && (sc.isActive || sc.stableStateReached));
+          });
+
+          if (sc.isActive) {
+            nodes.smartStatusBox.className = "smart-status-box active";
+            nodes.smartStatusTitle.textContent = "Optimizer: Active";
+            nodes.smartStatusText.textContent = sc.optimizationStatus;
+            nodes.smartReset.style.display = "none";
+          } else if (sc.stableStateReached) {
+            nodes.smartStatusBox.className = "smart-status-box stable";
+            nodes.smartStatusTitle.textContent = "Optimizer: Stable";
+            nodes.smartStatusText.textContent = sc.optimizationStatus;
+            nodes.smartReset.style.display = "inline-block";
+          } else {
+            nodes.smartStatusBox.className = "smart-status-box";
+            nodes.smartStatusTitle.textContent = "Optimizer: Idle";
+            nodes.smartStatusText.textContent = sc.optimizationStatus || "Select a cooling profile to activate dynamic temperature control.";
+            nodes.smartReset.style.display = "none";
+          }
+        }
+
+        // Update CpuStressTest UI
+        var st = snapshot.cpuStressTest;
+        if (st) {
+          Array.prototype.forEach.call(document.querySelectorAll("[data-stress]"), function (button) {
+            var val = button.getAttribute("data-stress");
+            button.classList.toggle("active", val === st.activeProfile && st.isActive);
+            button.disabled = !!st.isActive;
+          });
+
+          if (st.isActive) {
+            nodes.stressStatusBox.className = "stress-status-box active";
+            nodes.stressStatusTitle.textContent = "Auto-Tuner: Running (" + st.currentPhase + ")";
+            nodes.stressStatusText.textContent = "Elapsed: " + st.elapsedTimeSeconds + "s | Temp: " + st.currentTemp + "°C | Clock: " + (st.currentClock / 1000).toFixed(2) + " GHz\nMax Jump: " + st.maxSpikeDelta.toFixed(1) + "°C/s | Peak: " + st.peakTemperature + "°C";
+            nodes.stressStop.style.display = "inline-block";
+            nodes.stressProgressContainer.style.display = "block";
+            nodes.stressProgressBar.style.width = st.progressPercent + "%";
+            nodes.stressPulse.className = "stress-pulse active";
+          } else if (st.currentPhase === "Completed") {
+            nodes.stressStatusBox.className = "stress-status-box completed";
+            nodes.stressStatusTitle.textContent = "Auto-Tuner: Calibrated";
+            nodes.stressStatusText.textContent = st.calibrationReport;
+            nodes.stressStop.style.display = "none";
+            nodes.stressProgressContainer.style.display = "none";
+            nodes.stressPulse.className = "stress-pulse completed";
+          } else if (st.currentPhase === "Stopped") {
+            nodes.stressStatusBox.className = "stress-status-box";
+            nodes.stressStatusTitle.textContent = "Auto-Tuner: Cancelled";
+            nodes.stressStatusText.textContent = st.calibrationReport;
+            nodes.stressStop.style.display = "none";
+            nodes.stressProgressContainer.style.display = "none";
+            nodes.stressPulse.className = "stress-pulse";
+          } else if (st.currentPhase === "Error") {
+            nodes.stressStatusBox.className = "stress-status-box error";
+            nodes.stressStatusTitle.textContent = "Auto-Tuner: Failed";
+            nodes.stressStatusText.textContent = st.calibrationReport;
+            nodes.stressStop.style.display = "none";
+            nodes.stressProgressContainer.style.display = "none";
+            nodes.stressPulse.className = "stress-pulse error";
+          } else {
+            nodes.stressStatusBox.className = "stress-status-box";
+            nodes.stressStatusTitle.textContent = "Auto-Tuner: Idle";
+            nodes.stressStatusText.textContent = "Start a tuning benchmark to automatically calibrate custom EPP and caps.";
+            nodes.stressStop.style.display = "none";
+            nodes.stressProgressContainer.style.display = "none";
+            nodes.stressPulse.className = "stress-pulse";
+          }
+        }
+
+        nodes.processList.innerHTML = "";
+        if (processes && processes.length > 0) {
+          processes.forEach(function (proc) {
+            var row = document.createElement("div");
+            row.className = "process-row";
+            
+            var nameSpan = document.createElement("span");
+            nameSpan.className = "process-name";
+            nameSpan.textContent = proc.name;
+            
+            var cpuSpan = document.createElement("span");
+            cpuSpan.className = "process-cpu";
+            cpuSpan.textContent = proc.cpu + "%";
+            
+            row.appendChild(nameSpan);
+            row.appendChild(cpuSpan);
+            nodes.processList.appendChild(row);
+          });
+        } else {
+          var empty = document.createElement("div");
+          empty.className = "thermal-empty";
+          empty.textContent = "No active high-CPU processes.";
+          nodes.processList.appendChild(empty);
+        }
+
+        // Update RCA diagnostics
+        var rca = snapshot.rca;
+        var rcaStatus = document.getElementById("rcaStatus");
+        var rcaIssues = document.getElementById("rcaIssues");
+        var rcaActions = document.getElementById("rcaActions");
+
+        if (rca && rcaStatus && rcaIssues && rcaActions) {
+          rcaActions.innerHTML = "";
+          if (rca.hasIssues) {
+            rcaStatus.textContent = "Software Anomalies Detected";
+            rcaStatus.style.color = "#ff6b6b";
+
+            rcaIssues.style.whiteSpace = "pre-line";
+            rcaIssues.textContent = (rca.suggestions || []).map(function (sugg) {
+              return "• " + sugg;
+            }).join("\n");
+
+            if (rca.wmiHogging) {
+              var btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "thermal-refresh-btn";
+              btn.style.fontSize = "0.65rem";
+              btn.style.padding = "4px 8px";
+              btn.style.marginTop = "4px";
+              btn.style.border = "1px solid rgba(255, 107, 107, 0.4)";
+              btn.textContent = "Restart WMI Service";
+              btn.onclick = function() { post("thermal:fix:restart-wmi:0"); };
+              rcaActions.appendChild(btn);
+            }
+            if (rca.dellHogging) {
+              var btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = "thermal-refresh-btn";
+              btn.style.fontSize = "0.65rem";
+              btn.style.padding = "4px 8px";
+              btn.style.marginTop = "4px";
+              btn.style.border = "1px solid rgba(255, 107, 107, 0.4)";
+              btn.textContent = "Restart Dell Services";
+              btn.onclick = function() { post("thermal:fix:restart-dell:0"); };
+              rcaActions.appendChild(btn);
+            }
+            if (rca.rogueHogging) {
+              var btnTerm = document.createElement("button");
+              btnTerm.type = "button";
+              btnTerm.className = "thermal-refresh-btn";
+              btnTerm.style.fontSize = "0.65rem";
+              btnTerm.style.padding = "4px 8px";
+              btnTerm.style.marginTop = "4px";
+              btnTerm.style.border = "1px solid rgba(255, 107, 107, 0.4)";
+              btnTerm.textContent = "End " + rca.rogueProcessName;
+              btnTerm.onclick = function() { post("thermal:fix:terminate-process:" + rca.rogueProcessPid); };
+              rcaActions.appendChild(btnTerm);
+
+              var btnLimit = document.createElement("button");
+              btnLimit.type = "button";
+              btnLimit.className = "thermal-refresh-btn";
+              btnLimit.style.fontSize = "0.65rem";
+              btnLimit.style.padding = "4px 8px";
+              btnLimit.style.marginTop = "4px";
+              btnLimit.style.border = "1px solid rgba(255, 107, 107, 0.4)";
+              btnLimit.textContent = "Limit " + rca.rogueProcessName;
+              btnLimit.onclick = function() { post("thermal:fix:restrict-process:" + rca.rogueProcessPid); };
+              rcaActions.appendChild(btnLimit);
+            }
+          } else {
+            rcaStatus.textContent = "Software Health: Excellent";
+            rcaStatus.style.color = "#4ade80";
+            rcaIssues.textContent = "No background CPU loops or anomalies detected.";
+          }
+        }
+      }
+
+      function requestPower(mode) {
+        mode = normalizePower(mode);
+        app.setAttribute("data-emergency", "false");
+        post("power:" + mode);
+      }
+
+      function requestTheme() {
+        var nextTheme = app.getAttribute("data-theme") === "light" ? "dark" : "light";
+        state.theme = nextTheme;
+        state.settings = normalizeSettings(state.settings);
+        state.settings.theme = nextTheme;
+        render();
+        post("theme:" + nextTheme);
+      }
+
+      document.getElementById("powerUltra").addEventListener("click", function () { requestPower("ultra"); });
+      document.getElementById("powerDaily").addEventListener("click", function () { requestPower("daily"); });
+      document.getElementById("powerBattery").addEventListener("click", function () { requestPower("battery"); });
+      nodes.theme.addEventListener("click", requestTheme);
+      nodes.hide.addEventListener("click", function () { post("window:hide"); });
+      nodes.pin.addEventListener("click", function () {
+        state.isPinned = !state.isPinned;
+        render();
+        post("window:pin-toggle");
+      });
+      nodes.settings.addEventListener("click", function () {
+        app.setAttribute("data-drawer", "open");
+        app.setAttribute("data-thermal", "closed");
+      });
+      document.getElementById("signaturePlacementBtn").addEventListener("click", function () {
+        var current = normalizeSettings(state.settings).signaturePlacement;
+        var next = current === "right" ? "left" : current === "left" ? "bottom" : "right";
+        state.settings.signaturePlacement = next;
+        renderSettings();
+        post("signature:" + next);
+      });
+      document.getElementById("processorEditorBtn").addEventListener("click", function () {
+        app.setAttribute("data-drawer", "processor");
+        app.setAttribute("data-thermal", "closed");
+        nodes.processorList.innerHTML = '<div class="thermal-empty">Querying the active Windows power scheme...</div>';
+        post("processor:open");
+      });
+      document.getElementById("closeProcessorBtn").addEventListener("click", function () { app.setAttribute("data-drawer", "closed"); });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-processor-preset]"), function (button) {
+        button.addEventListener("click", function () { post("processor:preset:" + button.getAttribute("data-processor-preset")); });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-processor-action]"), function (button) {
+        button.addEventListener("click", function () { post("processor:" + button.getAttribute("data-processor-action")); });
+      });
+      nodes.closeSettings.addEventListener("click", function () {
+        app.setAttribute("data-drawer", "closed");
+      });
+      nodes.thermalBtn.addEventListener("click", function () {
+        app.setAttribute("data-thermal", "open");
+        app.setAttribute("data-drawer", "closed");
+        post("thermal:diagnostics");
+      });
+      nodes.closeThermal.addEventListener("click", function () {
+        app.setAttribute("data-thermal", "closed");
+      });
+      nodes.refreshThermal.addEventListener("click", function () {
+        post("thermal:diagnostics");
+      });
+      
+      Array.prototype.forEach.call(document.querySelectorAll("[data-smart]"), function (button) {
+        button.addEventListener("click", function () {
+          var val = button.getAttribute("data-smart");
+          post("thermal:smart:start:" + val);
+        });
+      });
+
+      nodes.smartReset.addEventListener("click", function () {
+        if (activeSmartProfile) {
+          post("thermal:smart:reset:" + activeSmartProfile);
+        }
+      });
+      nodes.smartStop.addEventListener("click", function () {
+        post("thermal:smart:stop");
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-stress]"), function (button) {
+        button.addEventListener("click", function () {
+          var val = button.getAttribute("data-stress");
+          post("thermal:stresstest:start:" + val);
+        });
+      });
+
+      nodes.stressStop.addEventListener("click", function () {
+        post("thermal:stresstest:stop");
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-dell]"), function (button) {
+        button.addEventListener("click", function () {
+          var val = button.getAttribute("data-dell");
+          post("thermal:smart:stop");
+          post("thermal:profile:set:" + val);
+        });
+      });
+      
+      Array.prototype.forEach.call(document.querySelectorAll("[data-boost]"), function (button) {
+        button.addEventListener("click", function () {
+          var val = button.getAttribute("data-boost");
+          post("thermal:smart:stop");
+          post("thermal:boost:" + val);
+        });
+      });
+
+      nodes.maxStateToggle.addEventListener("click", function () {
+        var isCurrentlyLimited = nodes.maxStateToggle.classList.contains("active");
+        var nextVal = isCurrentlyLimited ? 100 : 99;
+        post("thermal:smart:stop");
+        post("thermal:maxstate:" + nextVal);
+      });
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-setting]"), function (row) {
+        row.addEventListener("click", function () {
+          var key = row.getAttribute("data-setting");
+          state.settings = normalizeSettings(state.settings);
+          state.settings[key] = !state.settings[key];
+          renderSettings();
+          post("setting:" + key + ":" + state.settings[key]);
+        });
+      });
+
+      document.querySelector("[data-drag-region]").addEventListener("mousedown", function (event) {
+        if (event.button === 0 && !event.target.closest("button")) {
+          post("window:drag-start");
+        }
+      });
+
+      if (window.chrome && window.chrome.webview) {
+        window.chrome.webview.addEventListener("message", function (event) {
+          var incoming = event.data || {};
+          if (typeof incoming === "string") {
+            if (incoming === "emergency-eco") {
+              app.setAttribute("data-emergency", "true");
+              state.powerMode = "battery";
+              render();
+              return;
+            }
+
+            try {
+              incoming = JSON.parse(incoming);
+            } catch (ignore) {
+              incoming = {};
+            }
+          }
+
+          if (incoming.type === "state") {
+            merge(incoming.state);
+          } else if (incoming.type === "status") {
+            state.status = incoming.message || state.status;
+            statusIsError = !!incoming.isError;
+            render();
+          } else if (incoming.type === "emergency-eco") {
+            app.setAttribute("data-emergency", "true");
+            state.powerMode = "battery";
+            render();
+          } else if (incoming.type === "thermal") {
+            updateThermalUi(incoming.snapshot, incoming.processes);
+          } else if (incoming.type === "processor-settings") {
+            renderProcessor(incoming.data);
+          }
+        });
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

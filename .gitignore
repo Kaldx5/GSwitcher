@@ -1,0 +1,16 @@
+artifacts/
+dist/
+vendor/
+.vs/
+.agents/
+.serena/
+**/bin/
+**/obj/
+**/desktop.ini
+**/settings.json
+*.log
+*.pdb
+*.user
+*.suo
+*.zip
+.env*
