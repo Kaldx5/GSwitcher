@@ -18,7 +18,7 @@ The combinations I wanted to keep became PowerShell scripts. Those scripts grew 
 | Processor controls | Discover processor settings and validate AC/DC edits against Windows-reported values. |
 | Thermal tools | Diagnostics, cooling profiles, and a bounded CPU calibration workload. |
 | GPU visibility | Read-only dashboard route indicators; separate NVIDIA policy actions when supported. |
-| Everyday automation | Optional startup, quick-switch OSD, idle and lid behavior, battery protection, microphone muting, network focus, and telemetry HUD. |
+| Everyday automation | Optional startup, quick-switch OSD, idle and lid behavior, battery protection, internal-speaker muting, network focus, and telemetry HUD. |
 | Interface | Offline WebView2 dashboard, light/dark themes, tray integration, and local settings. |
 
 The source also includes Dell WMI and NVIDIA Control Panel route controllers. Their presence does **not** mean route switching is available through the dashboard or supported on every machine. See [operating boundaries](docs/OPERATING_BOUNDARIES.md).
