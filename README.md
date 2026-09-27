@@ -4,11 +4,11 @@
 
 Created by [Khaled Alrefai](https://github.com/Kaldx5). Designed around a Dell G16 environment, with a C# desktop host and an offline HTML/CSS/JavaScript interface.
 
-## Why I built it
+## How it started 💻
 
-Switching between performance, quiet everyday use, and battery operation meant navigating scattered controls and hardware-specific behavior. GSwitcher brings those decisions into one compact interface, with explicit feedback from Windows rather than assuming a requested change succeeded.
+My Dell G16 was running hotter and more aggressively than I expected during normal use. I started looking into what Windows was doing underneath, then manually tested power plans, processor limits, Boost behavior, and Dell thermal profiles.
 
-This project connects interface design, Windows integration, hardware investigation, and iterative implementation. It represents how I work: understand the problem, research the constraints, design a solution, direct implementation, and review the result.
+The combinations I wanted to keep became PowerShell scripts. Those scripts grew into a menu, and that menu eventually became GSwitcher. The dashboard came later, after I had a workflow worth putting behind it. ⚙️
 
 ## What is inside
 
@@ -23,11 +23,11 @@ This project connects interface design, Windows integration, hardware investigat
 
 The source also includes Dell WMI and NVIDIA Control Panel route controllers. Their presence does **not** mean route switching is available through the dashboard or supported on every machine. See [operating boundaries](docs/OPERATING_BOUNDARIES.md).
 
-## My contribution and AI-assisted workflow
+## My part in the project 🛠️
 
-I led the problem framing, research, planning, design direction, technical decisions, and iterative review. I used coding assistants and agents to accelerate implementation, then inspected their outputs, directed corrections, and made manual changes where needed.
+I researched the system behavior, planned the controls, shaped the interface, and worked through the implementation and revisions. A lot of the progress came from trying a change on my own machine, watching what happened, and going back to adjust it.
 
-I do not claim to have manually typed every line. My contribution is in turning an everyday problem into an integrated system and taking ownership of the decisions and development process.
+I use AI and coding tools where they help with development and investigation. Choosing what belongs in the application, understanding the control paths, and reviewing the result remain part of my work.
 
 Two decisions illustrate that approach:
 
@@ -70,10 +70,10 @@ The first script checks source structure and expected implementation patterns; i
 
 ## Repository layout
 
-- `source/GSwitcher.Desktop/` — desktop host, services, models, and offline UI.
-- `scripts/` — dependency restoration and selected verification tools.
-- `docs/` — operating boundaries, dependency attribution, and publication notes.
-- `build_portable.ps1` — portable build; `build_pro.ps1` — compatibility wrapper.
+- `source/GSwitcher.Desktop/`: desktop host, services, models, and offline UI.
+- `scripts/`: dependency restoration and selected verification tools.
+- `docs/`: operating boundaries, dependency attribution, and publication notes.
+- `build_portable.ps1`: portable build; `build_pro.ps1`: compatibility wrapper.
 
 This repository publishes the application source, not the original development archive. Agent conversations, machine diagnostics, personal settings, nested copies, and prebuilt binaries are excluded.
 
